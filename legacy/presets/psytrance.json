@@ -1,0 +1,279 @@
+{
+  "name": "psytrance",
+  "keywords": [
+    "psytrance",
+    "psychedelic",
+    "trance",
+    "goa",
+    "acid",
+    "hypnotic",
+    "four-on-the-floor",
+    "progressive trance",
+    "offbeat bass",
+    "психодел",
+    "транс",
+    "гипно",
+    "эйсид",
+    "гоа",
+    "пси-"
+  ],
+  "defaults": {
+    "uPaper": 0.0,
+    "uFold": 0.0,
+    "uContrast": 1.08,
+    "grain": 0.035,
+    "uChroma": 0.5,
+    "bloom": 0.9
+  },
+  "kinds": {
+    "intro": {
+      "every": 4,
+      "transition": "dissolve",
+      "burn_beats": 4,
+      "fx": {
+        "uKickZoom": 0.0,
+        "drift": 0.14,
+        "uWarp": 0.05,
+        "uSparks": 0.1
+      }
+    },
+    "verse": {
+      "every": 2,
+      "transition": "burn",
+      "burn_beats": 2,
+      "fx": {
+        "uKickZoom": 0.04,
+        "uSparks": 0.3,
+        "uWarp": 0.04
+      }
+    },
+    "pre": {
+      "every": 2,
+      "transition": "burn",
+      "burn_beats": 2,
+      "fx": {
+        "uWarp": 0.1,
+        "rot_speed": 0.06,
+        "uSparks": 0.45,
+        "uFlames": 0.2
+      }
+    },
+    "chorus": {
+      "every": 1,
+      "transition": "burn",
+      "burn_beats": 1,
+      "blend_beats": 0.5,
+      "fx": {
+        "uKaleido": 0.55,
+        "uKSeg": 8.0,
+        "kaleido_pulse": 0.25,
+        "spin_speed": 0.7,
+        "uSparks": 0.9,
+        "uFlames": 0.35,
+        "kick_flash": 0.14,
+        "uKickZoom": 0.07,
+        "uChroma": 0.9,
+        "uTunnel": 0.12,
+        "bloom": 1.0,
+        "uSat": 1.25,
+        "uNeon": 0.1
+      }
+    },
+    "breakdown": {
+      "every": 2,
+      "transition": "dissolve",
+      "burn_beats": 3,
+      "fx": {
+        "uWarp": 0.14,
+        "rot_speed": 0.08,
+        "uSparks": 0.3,
+        "uKickZoom": 0.0,
+        "uNeon": 0.2
+      }
+    },
+    "solo": {
+      "every": 1,
+      "transition": "burn",
+      "burn_beats": 1,
+      "fx": {
+        "uTunnel": 0.35,
+        "uKaleido": 0.6,
+        "uNeon": 0.35,
+        "spin_speed": 1.0,
+        "uGlitch": 0.1
+      }
+    },
+    "outro": {
+      "every": 8,
+      "transition": "dissolve",
+      "burn_beats": 3,
+      "fx": {
+        "uKickZoom": 0.0,
+        "drift": 0.15,
+        "uBright": 0.8,
+        "uSparks": 0.4
+      }
+    }
+  },
+  "worlds": [
+    {
+      "name": "fractal_temple",
+      "style": "psychedelic visionary art, intricate fractal patterns, sacred geometry, glowing ultraviolet and gold, bioluminescent, highly detailed digital painting",
+      "negative": "text, letters, watermark, logo, lowres, blurry, deformed, frame, border",
+      "motifs": {
+        "intro": [
+          "a glowing fractal temple in a misty jungle at dawn",
+          "{title}, visionary art"
+        ],
+        "verse": [
+          "bioluminescent mushrooms forest at night",
+          "a fractal eye opening in the sky",
+          "glowing sacred geometry floating over mountains",
+          "a shaman silhouette surrounded by light patterns"
+        ],
+        "pre": [
+          "a spiral staircase of light ascending into a fractal sky",
+          "cosmic serpent coiling through stars"
+        ],
+        "chorus": [
+          "{title}, explosive psychedelic mandala",
+          "a fractal sun radiating neon rays",
+          "a dancing crowd silhouettes under a fractal sky",
+          "kaleidoscopic lotus of fire and light"
+        ],
+        "breakdown": [
+          "a calm cosmic ocean reflecting a nebula",
+          "floating crystals in violet mist"
+        ],
+        "solo": [
+          "an infinite fractal tunnel of light",
+          "a psychedelic kaleidoscope of eyes and flowers"
+        ],
+        "outro": [
+          "stars fading into dawn over a quiet jungle"
+        ]
+      },
+      "fx": {
+        "tintR": 1.0,
+        "tintG": 0.97,
+        "tintB": 1.05
+      },
+      "keywords": [
+        "psychedelic",
+        "fractal",
+        "visionary",
+        "shaman",
+        "goa",
+        "психодел"
+      ]
+    },
+    {
+      "name": "paper_fire",
+      "style": "intricate layered cut-paper diorama, kirigami and origami, handmade washi paper texture, paper craft miniature, soft volumetric light, cinematic, rich warm colors, highly detailed",
+      "negative": "text, letters, watermark, logo, lowres, blurry, deformed, frame, border",
+      "motifs": {
+        "intro": [
+          "hundreds of glowing paper lanterns over a paper-cut city at dusk",
+          "{title}, paper craft diorama"
+        ],
+        "verse": [
+          "a paper forest with folded birds taking flight",
+          "a paper temple with swinging bells",
+          "a single paper match igniting",
+          "paper cherry blossoms swirling in wind"
+        ],
+        "pre": [
+          "an old paper map with burning edges, embers",
+          "a paper road splitting under a huge paper sun"
+        ],
+        "chorus": [
+          "{title}, paper mandala bursting into flames",
+          "a giant paper ferris wheel wreathed in fire",
+          "paper-cut silhouettes of raised hands against fire",
+          "a paper phoenix made of flames and sparks"
+        ],
+        "breakdown": [
+          "a quiet paper stream with a floating paper crown",
+          "a lonely paper lantern in the dark"
+        ],
+        "solo": [
+          "a tunnel of folded paper and fire",
+          "kaleidoscope of burning paper patterns"
+        ],
+        "outro": [
+          "drifting embers and grey paper ash in darkness"
+        ]
+      },
+      "fx": {
+        "uPaper": 0.55,
+        "uFold": 0.15,
+        "tintR": 1.06,
+        "tintG": 0.97,
+        "tintB": 0.86
+      },
+      "keywords": [
+        "paper",
+        "origami",
+        "fire",
+        "flame",
+        "spark",
+        "бумаг",
+        "огон"
+      ]
+    },
+    {
+      "name": "neon_shrine",
+      "style": "japanese shrine at night reimagined in psychedelic neon, torii gates, glowing ultraviolet and magenta, mist, cinematic anime background art, ultra detailed",
+      "negative": "text, letters, watermark, logo, lowres, blurry, deformed, frame, border",
+      "motifs": {
+        "intro": [
+          "a misty mountain shrine at night, glowing torii gates",
+          "{title}, neon japanese night"
+        ],
+        "verse": [
+          "an endless path of neon torii gates",
+          "a koi pond glowing ultraviolet",
+          "shrine bells swaying with light trails",
+          "a neon kitsune mask floating in mist"
+        ],
+        "pre": [
+          "lanterns rising into a swirling sky",
+          "a stone staircase ascending into light"
+        ],
+        "chorus": [
+          "{title}, psychedelic neon mandala over the shrine",
+          "a giant glowing koi spiraling in the sky",
+          "fireworks bursting over neon torii",
+          "a kaleidoscope of lanterns and sakura"
+        ],
+        "breakdown": [
+          "a still moonlit pond with one lantern",
+          "falling sakura in blue mist"
+        ],
+        "solo": [
+          "a vortex of torii gates",
+          "an ultraviolet dragon made of light"
+        ],
+        "outro": [
+          "dawn over the quiet shrine"
+        ]
+      },
+      "fx": {
+        "tintR": 0.98,
+        "tintG": 0.95,
+        "tintB": 1.08
+      },
+      "keywords": [
+        "j-rock",
+        "jrock",
+        "japan",
+        "japanese",
+        "tokyo",
+        "anime",
+        "джей-рок",
+        "япон",
+        "аниме"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,272 @@
+{
+  "name": "ambient",
+  "keywords": [
+    "ambient",
+    "drone",
+    "atmospheric",
+    "chill",
+    "meditative",
+    "downtempo",
+    "new age",
+    "soundscape",
+    "calm",
+    "ethereal",
+    "lo-fi",
+    "lofi",
+    "эмбиент",
+    "амбиент",
+    "атмосфер",
+    "спокойн",
+    "медитат",
+    "дрон",
+    "чиллаут",
+    "лоу-фай"
+  ],
+  "defaults": {
+    "uPaper": 0.0,
+    "uFold": 0.0,
+    "uKickZoom": 0.0,
+    "uChroma": 0.2,
+    "uContrast": 1.0,
+    "uSat": 0.95,
+    "grain": 0.04,
+    "bloom": 1.0,
+    "drift": 0.18,
+    "pan": 0.07,
+    "uWarp": 0.05,
+    "uVignette": 0.75,
+    "sparkR": 1.2,
+    "sparkG": 1.1,
+    "sparkB": 1.0
+  },
+  "kinds": {
+    "intro": {
+      "every": 8,
+      "transition": "dissolve",
+      "burn_beats": 8,
+      "fx": {
+        "uSparks": 0.08
+      }
+    },
+    "verse": {
+      "every": 8,
+      "transition": "dissolve",
+      "burn_beats": 6,
+      "fx": {
+        "uSparks": 0.12,
+        "uWarp": 0.07
+      }
+    },
+    "pre": {
+      "every": 4,
+      "transition": "dissolve",
+      "burn_beats": 6,
+      "fx": {
+        "uSparks": 0.2,
+        "uWarp": 0.1,
+        "rot_speed": 0.02
+      }
+    },
+    "chorus": {
+      "every": 4,
+      "transition": "dissolve",
+      "burn_beats": 6,
+      "fx": {
+        "uSparks": 0.3,
+        "uWarp": 0.1,
+        "bloom": 1.3,
+        "uKaleido": 0.12,
+        "uKSeg": 6.0,
+        "uSat": 1.05
+      }
+    },
+    "breakdown": {
+      "every": 8,
+      "transition": "dissolve",
+      "burn_beats": 8,
+      "fx": {
+        "uSparks": 0.1,
+        "uWarp": 0.12
+      }
+    },
+    "solo": {
+      "every": 4,
+      "transition": "dissolve",
+      "burn_beats": 6,
+      "fx": {
+        "uSparks": 0.25,
+        "uWarp": 0.1
+      }
+    },
+    "outro": {
+      "every": 8,
+      "transition": "dissolve",
+      "burn_beats": 8,
+      "fx": {
+        "uBright": 0.8,
+        "uSparks": 0.08
+      }
+    }
+  },
+  "worlds": [
+    {
+      "name": "quiet_earth",
+      "style": "cinematic landscape photography, soft natural light, mist, vast scale, serene, muted colors, film look, ultra detailed",
+      "negative": "text, letters, watermark, logo, people, lowres, blurry, oversaturated, frame, border",
+      "motifs": {
+        "intro": [
+          "mist over a still mountain lake at dawn",
+          "{title}, serene cinematic landscape"
+        ],
+        "verse": [
+          "slow clouds over endless dunes",
+          "a lone tree on a hill in fog",
+          "aurora over a frozen fjord",
+          "rain drops on a calm pond, ripples"
+        ],
+        "pre": [
+          "sunbeams breaking through clouds over the ocean",
+          "a forest path glowing in golden light"
+        ],
+        "chorus": [
+          "{title}, breathtaking vista at golden hour",
+          "a starry sky over glowing mountains",
+          "light rays through a cathedral of redwoods",
+          "the ocean horizon with a giant pale moon"
+        ],
+        "breakdown": [
+          "snow falling in a silent forest",
+          "a quiet beach at blue hour"
+        ],
+        "solo": [
+          "a nebula reflected in a glacial lake",
+          "floating lanterns over still water"
+        ],
+        "outro": [
+          "dusk fading over the sea"
+        ]
+      },
+      "fx": {
+        "tintR": 1.0,
+        "tintG": 1.0,
+        "tintB": 1.03
+      },
+      "keywords": [
+        "nature",
+        "landscape",
+        "calm",
+        "природ"
+      ]
+    },
+    {
+      "name": "deep_space",
+      "style": "cosmic space art, nebulae, soft glowing gas clouds, distant galaxies, calm and vast, painterly, ultra detailed",
+      "negative": "text, letters, watermark, logo, lowres, blurry, frame, border",
+      "motifs": {
+        "intro": [
+          "a faint nebula emerging from darkness",
+          "{title}, cosmic art"
+        ],
+        "verse": [
+          "a slow drifting planet with rings",
+          "a glowing gas cloud in purple and teal",
+          "a star cluster sparkling",
+          "a lonely space station orbiting a blue planet"
+        ],
+        "pre": [
+          "a galaxy spiral slowly turning",
+          "a comet trailing light"
+        ],
+        "chorus": [
+          "{title}, radiant nebula bloom",
+          "a supernova of soft light",
+          "the milky way over an alien ocean",
+          "golden cosmic dust clouds"
+        ],
+        "breakdown": [
+          "deep black space with faint stars",
+          "an ice moon in shadow"
+        ],
+        "solo": [
+          "a wormhole of soft light",
+          "crystalline asteroid field"
+        ],
+        "outro": [
+          "the last star fading into black"
+        ]
+      },
+      "fx": {
+        "tintR": 0.97,
+        "tintG": 1.0,
+        "tintB": 1.06
+      },
+      "keywords": [
+        "space",
+        "cosmic",
+        "stars",
+        "космос",
+        "звезд"
+      ]
+    },
+    {
+      "name": "underwater",
+      "style": "serene underwater world, god rays through clear water, bioluminescence, soft blue and teal, floating particles, cinematic, ultra detailed",
+      "negative": "text, letters, watermark, logo, lowres, blurry, deformed, frame, border",
+      "motifs": {
+        "intro": [
+          "sun rays piercing a calm blue ocean surface from below",
+          "{title}, underwater dream"
+        ],
+        "verse": [
+          "a slow jellyfish glowing in the deep",
+          "a kelp forest swaying",
+          "a whale gliding far away",
+          "bubbles rising in teal light"
+        ],
+        "pre": [
+          "a school of silver fish forming a spiral",
+          "light caustics dancing on sand"
+        ],
+        "chorus": [
+          "{title}, luminous underwater cathedral",
+          "bioluminescent plankton swirling",
+          "a manta ray flying through sunbeams",
+          "a coral garden glowing"
+        ],
+        "breakdown": [
+          "the dark deep with faint lights",
+          "a sunken statue covered in moss"
+        ],
+        "solo": [
+          "a vortex of glowing plankton",
+          "an underwater aurora"
+        ],
+        "outro": [
+          "rising toward a pale surface light"
+        ]
+      },
+      "fx": {
+        "tintR": 0.94,
+        "tintG": 1.0,
+        "tintB": 1.07
+      },
+      "keywords": [
+        "water",
+        "ocean",
+        "sea",
+        "underwater",
+        "вода",
+        "море",
+        "океан"
+      ]
+    }
+  ],
+  "weak_keywords": [
+    "cinematic",
+    "кинематограф",
+    "minimal",
+    "минимал",
+    "piano",
+    "пианино"
+  ]
+}

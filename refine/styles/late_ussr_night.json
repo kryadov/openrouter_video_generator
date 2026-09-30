@@ -1,0 +1,24 @@
+{
+  "name": "late_ussr_night",
+  "description": "Nostalgic late-Soviet night: warm yellow tungsten interiors vs teal-blue night, 35mm grain, faceless pair of friends, calm unhurried camera. Proven on a real release (approved by the artist).",
+  "source": "approved refine shot list (nostalgic Italo-disco/chillwave track)",
+  "model": "bytedance/seedance-2.0-fast",
+  "resolution": "720p",
+  "aspect_ratio": "9:16",
+  "look": "late-Soviet 1980s atmosphere, photorealistic live-action on 35mm film, warm yellow tungsten interior light against teal-blue night, soft grain, nostalgic, bittersweet",
+  "rules": "all people on screen are European; faces are never shown, people are seen only from behind or as silhouettes; nobody sings or speaks; no text, no letters, no signs with writing, no subtitles, no watermark",
+  "pair": "a young European man and a young European woman in their twenties, close friends, in late-1980s clothes: he has short dark hair and wears a brown corduroy jacket; she has long light-brown hair and wears a long beige trench coat with a knitted red scarf",
+  "grade": "eq=contrast=1.04:saturation=1.05:gamma=1.0,noise=alls=7:allf=t",
+  "music_template": "Shot for the music video of a laid-back, nostalgic {bpm} BPM {genre} song, calm and dreamy, slow smooth camera movement, gentle unhurried motion",
+  "shot_ideas": [
+    "pair at a window over the night city (from behind)",
+    "clean cassette recorder close-up",
+    "two glasses of tea in metal holders, steam, keys",
+    "stairwell with bare yellow bulbs",
+    "empty street under sodium lights",
+    "pair on the rooftop edge, city below",
+    "apartment block exterior with one glowing yellow window",
+    "cover image brought to life (image-to-video)"
+  ],
+  "editing": "2-bar shots with 1-bar detail inserts; audio starts in the silence before the vocal pickup; tail bar with fade"
+}

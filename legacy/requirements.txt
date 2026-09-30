@@ -1,0 +1,12 @@
+# legacy/ local GPU pipeline (shader renderer + SDXL keyframes) — needs an NVIDIA GPU
+-r ../requirements.txt
+moderngl
+pillow
+huggingface_hub
+diffusers
+transformers
+accelerate
+safetensors
+sentencepiece
+protobuf
+# torch/torchvision: pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128

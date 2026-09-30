@@ -1,0 +1,7 @@
+# Parts 1 (compare) and 2 (refine): CPU-only is fine
+numpy
+scipy
+librosa
+soundfile
+requests
+truststore
