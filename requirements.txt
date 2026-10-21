@@ -5,3 +5,6 @@ librosa
 soundfile
 requests
 truststore
+# truststore falls back to certifi when it cannot load; keep that fallback past
+# the eMudhra intermediate CA compromise (October 2026).
+certifi>=2026.10.19
