@@ -62,6 +62,8 @@ input/, output/    user data (gitignored)
 
 ## Pitfalls already hit
 
+- **Visible cuts and samey extras (maintainer rejected v1 and v2 of Last of Trance).** Separate text-to-video shots jump in light, place and costume, and a shared `{enemies}` placeholder gives every shot the same cloned faces. Default for story clips: build the shot list as one continuous movement with `"chain": true` (see README). Describe different extras in each shot (age, build, hair, clothes) and add "no two people alike" to `rules`. Keep the hero in motion in every shot, with no standing or walking holds except the final exit. A chain re-keys everything after a changed shot, so check the first shots before paying for the rest.
+
 - **Content filters.** Veo filters scenes like "enemies lying defeated" and returns no output (cost $0, but the shot is lost). Show defeat indirectly: empty space, fog, the hero walking away.
 - **Rounding of generation seconds.** A shot of 3.65 s becomes 3.65 + 0.35 = 4.0000x and rounds up to the next duration, which re-keys an already paid 4 s shot. When re-timing a shot list, run `plan_cost` per model, and pin `gen_seconds` on shots whose paid clip still covers the new length.
 - **The `[auto excerpt]` line** in compare output is the scorer's candidate. The shot list's own `excerpt` (printed on the `[shotlist]` line) is what gets rendered.

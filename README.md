@@ -122,11 +122,14 @@ Keep one file per version (`shotlist_v1.json`, `_v2`, …). Each version renders
     {"id": "s1", "bars": [0, 2], "prompt": "{music}. Vertical 9:16 frame. ... {look}. {rules}",
      "seeds": [7, 21], "pick": 21,          // several takes, choose one
      "first_frame": "cover_9x16.jpg",       // image-to-video from a file next to the shot list
+     "chain": true,                         // start on the previous shot's last used frame: seamless cut
      "window": [0.2, 1.0],                  // manual source [offset, speed] instead of beat-fitting
      "stutter": true}                       // cut one slice per beat on motion peaks (drums etc.)
   ]
 }
 ```
+
+**Chained shots.** `"chain": true` makes a shot start (image-to-video) on the exact frame where the edit leaves the previous shot, so the cut is invisible and the action carries straight on. Chained shots are generated one after another, and both sides of a chained cut are edited from the clip start at normal speed (`window` [0, 1]) instead of beat-fitting. Regenerating a shot re-keys every chained shot after it, so review a chain from the top.
 
 **Cache rule.** A shot is identified by model, fully substituted prompt, duration, aspect ratio, resolution, seed and first-frame image. To reuse a paid shot in a new version, keep its `id` and its exact final prompt text. Changing a shared `{placeholder}` changes every shot that uses it, so freeze reused prompts as literal strings.
 

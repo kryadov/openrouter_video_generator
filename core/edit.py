@@ -105,6 +105,8 @@ def assemble(c, mid, take=None):
                 off, sp = 0.0, round(min(1.0, (src_len - 1 / OUT_FPS) / dur_out), 4)
             elif s.get("window"):
                 off, sp = s["window"]
+            elif s.get("chain") or (i + 1 < len(sl["shots"]) and sl["shots"][i + 1].get("chain")):
+                off, sp = 0.0, 1.0  # a chained cut must match the frame the next shot starts from
             elif first_frame(c, s):
                 off, sp = 0.0, 1.0
             else:

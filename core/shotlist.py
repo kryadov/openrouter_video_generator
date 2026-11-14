@@ -8,9 +8,14 @@ Fields:
   model, aspect_ratio, resolution
   any string field (music, look, rules, cast, setting, pair, ...) -> {placeholder} in shot prompts
   grade                         ffmpeg filter applied to every shot
-  shots[] {id, bars, prompt, lyric?, seeds?, pick?, gen_seconds?, first_frame?, window?, stutter?}
+  shots[] {id, bars, prompt, lyric?, seeds?, pick?, gen_seconds?, first_frame?, chain?, window?, stutter?}
+
+chain: true starts the shot (image-to-video) on the last frame the edit uses from the previous shot,
+so the cut is seamless. Chained shots are generated one after another, and both sides of a chained cut
+are edited with window [0, 1] (no beat-fitting) unless a window is given.
 """
 import base64
+import subprocess
 import json
 import math
 from collections import defaultdict
@@ -81,9 +86,44 @@ def first_frame(c, shot):
     return (c.base / ff) if ff else None
 
 
+def chosen_seed(shot):
+    return shot["pick"] if shot.get("pick") is not None else seeds_of(shot)[0]
+
+
+def clip_path(c, mid, shot, seed=None):
+    """Cache path of a shot's clip for its chosen (or the given) seed."""
+    sec = gen_seconds(c.sl, mid, shot, shot_span(c, shot)[1])
+    return shot_path(c, mid, shot, chosen_seed(shot) if seed is None else seed, sec)
+
+
+def chain_source(c, mid, shot):
+    """(previous shot's clip, source time of its last used frame) for a chained shot, else None."""
+    if not shot.get("chain"):
+        return None
+    i = [s["id"] for s in c.sl["shots"]].index(shot["id"])
+    if i == 0:
+        raise SystemExit(f"shot {shot['id']}: chain needs a previous shot")
+    prev = c.sl["shots"][i - 1]
+    off, sp = prev.get("window") or [0.0, 1.0]
+    return clip_path(c, mid, prev), off + shot_span(c, prev)[1] * sp
+
+
+def chain_frame(c, mid, shot):
+    """Extract (once) the previous clip's last used frame as a jpg next to it."""
+    src, t = chain_source(c, mid, shot)
+    jpg = src.with_name(f"{src.stem}_at{t:.3f}.jpg")
+    if not jpg.exists():
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{max(0.0, t - 1 / 30):.4f}", "-i", str(src),
+                        "-frames:v", "1", "-q:v", "2", str(jpg)], check=True)
+    return jpg
+
+
 def shot_path(c, mid, shot, seed, sec):
     ff = first_frame(c, shot)
     tag = f"|ff:{ff.stat().st_size}" if ff else ""
+    ch = chain_source(c, mid, shot)
+    if ch:
+        tag = f"|chain:{ch[0].name}@{ch[1]:.3f}"
     key = videogen.job_key(mid, prompt_of(c.sl, shot) + tag, sec, c.sl["aspect_ratio"], c.sl["resolution"], seed)
     return c.base / "shots" / slug(mid) / f"{shot['id']}_s{seed}_{key}.mp4"
 
@@ -106,11 +146,19 @@ def generate(c, mid, budget=None, dry=False):
     total = sum(t[3] for t in todo)
     jobs = []
     for s, seed, sec, est, out in todo:
+        ch = chain_source(c, mid, s)
         if dry:
-            print(f"  would generate {mid} {s['id']} seed {seed}: {sec}s, est ${est:.2f}")
+            after = f" (chained after {ch[0].name})" if ch else ""
+            print(f"  would generate {mid} {s['id']} seed {seed}: {sec}s, est ${est:.2f}{after}")
+            continue
+        if ch and not ch[0].exists() and jobs:
+            videogen.wait_all(jobs)  # the previous shot must exist before its last frame can seed this one
+            jobs = []
+        if ch and not ch[0].exists():
+            print(f"  skip {s['id']}: previous clip {ch[0].name} is missing")
             continue
         extra = None
-        ff = first_frame(c, s)
+        ff = chain_frame(c, mid, s) if ch else first_frame(c, s)
         if ff:
             uri = "data:image/jpeg;base64," + base64.b64encode(ff.read_bytes()).decode()
             extra = {"frame_images": [{"type": "image_url", "image_url": {"url": uri}, "frame_type": "first_frame"}]}
