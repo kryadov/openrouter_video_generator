@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 DEFAULTS = {
     "OPENROUTER_API_KEY": "",
-    "VIDEO_BUDGET_USD": "10",
+    "VIDEO_BUDGET_USD": "",
     "COMPARE_MODELS": "google/veo-3.1-lite,google/veo-3.1-fast,kwaivgi/kling-v3.0-std,bytedance/seedance-2.0-fast",
     "REFINE_MODEL": "bytedance/seedance-2.0-fast",
     "VIDEO_RESOLUTION": "720p",
@@ -36,4 +36,6 @@ def models_list(key="COMPARE_MODELS"):
 
 
 def budget():
-    return float(get("VIDEO_BUDGET_USD") or 10)
+    """Optional hard cap on the ledger total; unset or empty means no cap (spending is still logged)."""
+    v = get("VIDEO_BUDGET_USD")
+    return float(v) if v else float("inf")

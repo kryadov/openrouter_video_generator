@@ -1,4 +1,4 @@
-"""OpenRouter video generation: cached, budget-capped.
+"""OpenRouter video generation: cached, every job logged, optional budget cap.
 
 Every paid call is recorded in output/_ledger.json. A job is refused if the ledger total plus
 its estimated cost would exceed the budget. Results are cached by (model, prompt, params) hash,

@@ -7,7 +7,7 @@
 
 Steps: beat/section analysis -> best short-form excerpt (excerpt.json, 3 candidates) ->
 default shot list (output/<track>/compare/shotlist.json, editable) -> every model renders every shot
-(cached, budget-capped) -> output/<track>/compare/<model>.mp4 + compare.mp4 grid (2x2 / 3x2 / 4x2).
+(cached, logged in the ledger) -> output/<track>/compare/<model>.mp4 + compare.mp4 grid (2x2 / 3x2 / 4x2).
 
 --probe <shot id> is the cheap first step: it writes compare/probe.json with that one shot stretched to
 --probe-bars bars (default: the fewest whole bars >= 5 s), renders it on every model and builds
@@ -72,7 +72,8 @@ def main():
     total = sum(costs.values())
     for m, v in costs.items():
         print(f"  {m:40s} ${v:.2f}")
-    print(f"[cost] new shots ${total:.2f}; ledger ${videogen.spent():.2f}; budget ${budget:.2f}")
+    cap = f"; cap ${budget:.2f}" if budget != float("inf") else ""
+    print(f"[cost] new shots ${total:.2f}; ledger ${videogen.spent():.2f}{cap}")
     if a.dry_run:
         return
     if videogen.spent() + total > budget:

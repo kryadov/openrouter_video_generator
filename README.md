@@ -7,13 +7,13 @@ Work happens in two parts:
 1. **`compare`**: renders the same brief with 4, 6 or 8 video models and puts the results side by side, so you can pick a model.
 2. **`refine`**: iterates on the chosen model through versioned shot lists. Only the shots you change are paid for again. Re-editing (reordering, trimming, changing timing) costs nothing.
 
-Audio analysis, excerpt selection and editing all run locally. The only paid step is video generation, and a hard budget cap stops it before it can overspend.
+Audio analysis, excerpt selection and editing all run locally. The only paid step is video generation, and every job is logged with its cost; an optional cap can stop it before it overspends.
 
 ```
 input/<Track>/*.wav ─► analysis (tempo, beat/bar grid, sections)
                     ─► best short-form excerpt (hook first, loopable, phrase-aligned)
                     ─► shot list (JSON, editable)
-                    ─► OpenRouter video models (cached per shot, budget-capped)
+                    ─► OpenRouter video models (cached per shot, cost-logged)
                     ─► bar-exact edit + beat-synced trims + excerpt audio with fade-out
                     ─► output/<Track>/{compare|short}/*.mp4
 ```
@@ -45,7 +45,7 @@ sudo apt update && sudo apt install -y python3-venv ffmpeg fonts-dejavu-core git
 git clone https://github.com/kryadov/openrouter_video_generator.git && cd openrouter_video_generator
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env        # add OPENROUTER_API_KEY, set VIDEO_BUDGET_USD
+cp .env.example .env        # add OPENROUTER_API_KEY
 ```
 
 On Windows, use `.venv\Scripts\python` and put ffmpeg on `PATH` (`winget install ffmpeg`).
@@ -55,7 +55,7 @@ On Windows, use `.venv\Scripts\python` and put ffmpeg on `PATH` (`winget install
 | Key | Meaning |
 |---|---|
 | `OPENROUTER_API_KEY` | the only secret |
-| `VIDEO_BUDGET_USD` | hard cap on the **total** spend recorded in `output/_ledger.json`; any job that would exceed it is refused before it is submitted |
+| `VIDEO_BUDGET_USD` | optional hard cap on the **total** spend recorded in `output/_ledger.json`; when set, a job that would exceed it is refused before it is submitted. Unset = no cap |
 | `COMPARE_MODELS` | comma-separated model ids for part 1 (4, 6 or 8 fill the grid best) |
 | `REFINE_MODEL` | the model chosen for part 2 |
 | `VIDEO_RESOLUTION` | `480p` / `720p` for new shot lists |
@@ -135,7 +135,7 @@ Keep one file per version (`shotlist_v1.json`, `_v2`, …). Each version renders
 
 ## Budget and ledger
 
-Every submitted job is written to `output/_ledger.json` with its estimate, then updated with the actual cost reported by OpenRouter. `--dry-run` prices everything up front, and a run that would exceed `VIDEO_BUDGET_USD` stops before it starts. Typical cost of a 30 s 720p short with 8 shots on Seedance 2.0 Fast: **~$3–4**. A full 4-model comparison costs **~$10**.
+Every submitted job is written to `output/_ledger.json` with its estimate, then updated with the actual cost reported by OpenRouter. `--dry-run` prices everything up front, and, if `VIDEO_BUDGET_USD` is set, a run that would exceed it stops before it starts. Typical cost of a 30 s 720p short with 8 shots on Seedance 2.0 Fast: **~$3–4**. A full 4-model comparison costs **~$10**.
 
 ## Creative guidelines (learned the hard way)
 

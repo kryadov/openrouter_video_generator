@@ -14,9 +14,8 @@ It makes short-form vertical music videos (20–40 s) from a track in `input/<Tr
 ## Hard constraints
 
 - **Cloud generation goes through OpenRouter only.** No fal.ai, Replicate or other providers, even when they offer something OpenRouter lacks. You can mention such a capability, but don't build for it.
-- **Money.** Every paid call goes through `core/videogen.py` (ledger `output/_ledger.json`, cap `VIDEO_BUDGET_USD`). Always `--dry-run` first and state the cost before spending. Budgets come in small increments from the maintainer, so spend carefully and prefer fixes that need no generation (reorder, `window`, `stutter`, `pick` another seed, `--assemble-only`).
-- **`VIDEO_BUDGET_USD` is a lifetime cap on the ledger total across all tracks and keys**, not a per-key balance. Report it as "spent $X of $Y, $Z left, this run $N". If the maintainer switches to a new OpenRouter key, set the cap to ledger total + the new key's balance. Don't edit or reset the ledger.
-- **Paid runs need an explicit go.** Before any run that costs money, show the maintainer the audio analysis, the shot list and the `--dry-run` cost, then wait for their "go". A budget answer is not a go. Don't put a paid run in the background while questions are still open.
+- **Money: economy, not a cap.** Every paid call goes through `core/videogen.py` and is logged in `output/_ledger.json`. The maintainer removed the budget cap (`VIDEO_BUDGET_USD` is unset, meaning no cap). Don't ask to raise or set a cap, and don't plan around one. Spend economically instead: always `--dry-run` first and state the cost, and prefer fixes that need no generation (reorder, `window`, `stutter`, `pick` another seed, `--assemble-only`). Regenerate only the shots that are actually wrong, and check a chain's first shots before paying for the rest.
+- **Paid runs need an explicit go.** Before any run that costs money, show the maintainer the audio analysis, the shot list and the `--dry-run` cost, then wait for their "go". Once they say "go" or "build the whole thing with all the notes", apply every open note and run it to the finished video without further check-ins.
 - **An interrupted run is already paid.** Jobs marked `"status": "submitted"` in the ledger are billed. Never rerun them, which pays twice. Recover them for free by polling their `job_id`: build `{"id", "model", "out": Path, "polling_url": f"{videogen.API}/videos/{id}"}` from each submitted ledger entry and pass the list to `videogen.wait_all`.
 - **Never delete or overwrite paid shots** in `output/**/shots/` unless explicitly asked.
 - **Minimal tokens, no LLM in the pipeline.** Shot lists are deterministic (`compare/autoshot.py`) or hand-edited JSON.
@@ -50,7 +49,7 @@ input/, output/    user data (gitignored)
 
 ## Starting a new track (the maintainer's usual workflow; order matters)
 
-1. **Budget status.** State the ledger total, the cap and what's left before proposing anything. Ask about details (location, hero, look) with concrete options.
+1. **Ask about details** (location, hero, look) with concrete options.
 2. **Analyse the wav and show the result.** Use the section list from `analysis/features_*.json` plus a per-bar table (rms, kick, bass, mid, high, air, kick count) built from the `.npz` over the excerpt and its neighbours. Name the drop hit, the build-ups, where new layers enter, the loudest bars and the natural ending.
 3. **Send the excerpt audio for approval.** The maintainer approves by ear, not from a table. Cut the proposed excerpt with ffmpeg into `output/<Track>/excerpts/*.m4a`, on the bar grid with the tail fade, and list planned cut times relative to the clip start. If the maintainer's timecode is ambiguous (track time or clip time?), cut both variants and let them choose. The automatic excerpt must not end before the loudest bars.
 4. **Write the shot list from the brief.** Read `input/<Track>/notes.txt` and `style.txt`. The `autoshot` default (stage, hands on instrument) ignores the brief. Put shot cuts on structural changes and the visual climax on the loudest bars of the chosen excerpt.
