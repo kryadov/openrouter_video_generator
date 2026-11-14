@@ -21,6 +21,7 @@ It makes short-form vertical music videos (20–40 s) from a track in `input/<Tr
 - **Never delete or overwrite paid shots** in `output/**/shots/` unless explicitly asked.
 - **Minimal tokens, no LLM in the pipeline.** Shot lists are deterministic (`compare/autoshot.py`) or hand-edited JSON.
 - **Secrets.** `.env` is gitignored, and `.env.example` documents every key. Never print the API key.
+- **Commit and push as you go.** After every change to code, README.md or AGENTS.md, commit it and push it to `origin main` without being asked (`git pull --ff-only` first). Never commit `.env`, `input/` or `output/`.
 - **Slow network.** Don't run speed tests or add large downloads without saying so.
 
 ## Layout
