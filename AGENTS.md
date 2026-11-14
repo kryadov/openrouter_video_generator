@@ -56,7 +56,9 @@ input/, output/    user data (gitignored)
 4. **Write the shot list from the brief.** Read `input/<Track>/notes.txt` and `style.txt`. The `autoshot` default (stage, hands on instrument) ignores the brief. Put shot cuts on structural changes and the visual climax on the loudest bars of the chosen excerpt.
 5. **Print every substituted prompt** with `prompt_of` and read it. Placeholders such as `{hero}` must be noun phrases that still read grammatically wherever they land. Put constraints like "bare hands, no weapon" in `rules`, not inside the noun phrase.
 6. **Run the model probe first, never the full compare first.** `python -m compare "input/<Track>" --probe <shot id>` renders one shot of about 5 s on every `COMPARE_MODELS` model and builds `compare/probe.mp4`, a labelled 2×2 grid in one frame. It costs about $1.7 for 4 models instead of about $8. The maintainer picks the model from it. The full shot list then runs on that one model (part 2, `refine/`), not on all four.
-7. Show the dry-run cost, then wait for the go.
+   The maintainer has picked `bytedance/seedance-2.0-fast` (`REFINE_MODEL`) on every track so far. Recommend it up front, and treat the probe as a confirmation, not an open question.
+7. **Reuse the probe shot in part 2.** Copy (don't move) the chosen model's probe clip from `compare/shots/<model>/` to `short/shots/<model>/`. Give that shot in `short/shotlist_v1.json` the same prompt and the same bar count, so that its cache key matches and it costs $0. Set `"model"` in the shot list.
+8. Show the dry-run cost, then wait for the go.
 
 ## Pitfalls already hit
 
