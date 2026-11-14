@@ -50,7 +50,7 @@ def ledger():
 
 
 def spent():
-    return round(sum(e.get("cost") or e.get("estimate", 0) for e in ledger()["entries"]), 4)
+    return round(sum(e["cost"] if e.get("cost") is not None else e.get("estimate", 0) for e in ledger()["entries"]), 4)
 
 
 def _record(entry):
