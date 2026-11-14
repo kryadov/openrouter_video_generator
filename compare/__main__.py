@@ -3,11 +3,17 @@
   python -m compare "input/My Track" --dry-run          # analysis, excerpt, shot list, cost
   python -m compare "input/My Track"                    # generate with COMPARE_MODELS (.env)
   python -m compare "input/My Track" --models google/veo-3.1-lite bytedance/seedance-2.0-fast
+  python -m compare "input/My Track" --probe c2           # one ~5 s shot on every model -> probe.mp4 grid
 
 Steps: beat/section analysis -> best short-form excerpt (excerpt.json, 3 candidates) ->
 default shot list (output/<track>/compare/shotlist.json, editable) -> every model renders every shot
 (cached, budget-capped) -> output/<track>/compare/<model>.mp4 + compare.mp4 grid (2x2 / 3x2 / 4x2).
+
+--probe <shot id> is the cheap first step: it writes compare/probe.json with that one shot stretched to
+--probe-bars bars (default: the fewest whole bars >= 5 s), renders it on every model and builds
+compare/probe.mp4, so the maintainer can pick a model before paying for the whole shot list.
 """
+import math
 import argparse
 import json
 import sys
@@ -29,6 +35,8 @@ def main():
     ap.add_argument("--budget", type=float, help="USD cap for the ledger total (default VIDEO_BUDGET_USD)")
     ap.add_argument("--dry-run", action="store_true", help="plan and price only")
     ap.add_argument("--replan", action="store_true", help="rebuild the default shot list")
+    ap.add_argument("--probe", metavar="SHOT_ID", help="render only this shot (~5 s) on every model -> probe.mp4")
+    ap.add_argument("--probe-bars", type=int, help="probe length in bars (default: fewest bars >= 5 s)")
     a = ap.parse_args()
 
     track = Path(a.track).name
@@ -42,7 +50,7 @@ def main():
     print(f"[analyze] {meta['tempo']:.1f} BPM, {meta['duration']:.1f}s")
     ex = excerpt.select(wav, work)
     cand = ex["candidates"][a.candidate - 1]
-    print(f"[excerpt] {cand['start']:.2f}-{cand['end']:.2f}s ({cand['bars']} bars) of {len(ex['candidates'])} candidates")
+    print(f"[auto excerpt] {cand['start']:.2f}-{cand['end']:.2f}s ({cand['bars']} bars) of {len(ex['candidates'])} candidates")
 
     sl_path = work / "compare" / "shotlist.json"
     if a.replan or not sl_path.exists():
@@ -53,7 +61,13 @@ def main():
         sl_path.write_text(json.dumps(sl, indent=2, ensure_ascii=False), encoding="utf-8")
         print(f"[shotlist] wrote {sl_path} ({len(sl['shots'])} shots) — edit it and rerun to change the brief")
 
-    c = load(track, "compare/shotlist.json")
+    rel = "compare/shotlist.json"
+    if a.probe:
+        rel = write_probe(load(track, rel), a.probe, a.probe_bars)
+    c = load(track, rel)
+    ex_sl = c.sl["excerpt"]
+    print(f"[shotlist] {rel}: {c.bars[c.b0] / 60:.2f}s, {ex_sl['bars']} bars + {ex_sl.get('tail_bars', 0)} tail, "
+          f"{len(c.sl['shots'])} shots")
     costs = {m: sum(t[3] for t in plan_cost(c, m)) for m in models}
     total = sum(costs.values())
     for m, v in costs.items():
@@ -69,12 +83,27 @@ def main():
     outs = []
     for m in models:
         try:
-            outs.append((m.split("/")[-1], assemble(c, m, take="")))
+            outs.append((m.split("/")[-1], assemble(c, m, take="_probe" if a.probe else "")))
         except SystemExit as e:
             print(f"  skip {m}: {e}")
     if len(outs) >= 2:
-        compare_grid(outs, work / "compare" / "compare.mp4")
+        compare_grid(outs, work / "compare" / ("probe.mp4" if a.probe else "compare.mp4"))
     print(f"ledger total ${videogen.spent():.2f}")
+
+
+def write_probe(c, shot_id, bars=None):
+    """compare/probe.json: the shot list's placeholders + one shot, starting on that shot's first bar."""
+    shot = next((s for s in c.sl["shots"] if s["id"] == shot_id), None)
+    if shot is None:
+        sys.exit(f"no shot {shot_id!r} in the shot list")
+    b = c.b0 + shot["bars"][0]
+    bar_s = (c.bars[b + 1] - c.bars[b]) / 60
+    n = bars or max(1, math.ceil(5.0 / bar_s - 1e-6))
+    sl = {k: v for k, v in c.sl.items() if k != "shots"}
+    sl["excerpt"] = {"start": round(c.bars[b] / 60, 3), "bars": n, "tail_bars": 0}
+    sl["shots"] = [{k: v for k, v in shot.items() if k not in ("bars", "gen_seconds")} | {"bars": [0, n]}]
+    (c.base / "probe.json").write_text(json.dumps(sl, indent=1, ensure_ascii=False), encoding="utf-8")
+    return "compare/probe.json"
 
 
 if __name__ == "__main__":

@@ -15,6 +15,9 @@ It makes short-form vertical music videos (20–40 s) from a track in `input/<Tr
 
 - **Cloud generation goes through OpenRouter only.** No fal.ai, Replicate or other providers, even when they offer something OpenRouter lacks. You can mention such a capability, but don't build for it.
 - **Money.** Every paid call goes through `core/videogen.py` (ledger `output/_ledger.json`, cap `VIDEO_BUDGET_USD`). Always `--dry-run` first and state the cost before spending. Budgets come in small increments from the maintainer, so spend carefully and prefer fixes that need no generation (reorder, `window`, `stutter`, `pick` another seed, `--assemble-only`).
+- **`VIDEO_BUDGET_USD` is a lifetime cap on the ledger total across all tracks and keys**, not a per-key balance. Report it as "spent $X of $Y, $Z left, this run $N". If the maintainer switches to a new OpenRouter key, set the cap to ledger total + the new key's balance. Don't edit or reset the ledger.
+- **Paid runs need an explicit go.** Before any run that costs money, show the maintainer the audio analysis, the shot list and the `--dry-run` cost, then wait for their "go". A budget answer is not a go. Don't put a paid run in the background while questions are still open.
+- **An interrupted run is already paid.** Jobs marked `"status": "submitted"` in the ledger are billed. Never rerun them, which pays twice. Recover them for free by polling their `job_id`: build `{"id", "model", "out": Path, "polling_url": f"{videogen.API}/videos/{id}"}` from each submitted ledger entry and pass the list to `videogen.wait_all`.
 - **Never delete or overwrite paid shots** in `output/**/shots/` unless explicitly asked.
 - **Minimal tokens, no LLM in the pipeline.** Shot lists are deterministic (`compare/autoshot.py`) or hand-edited JSON.
 - **Secrets.** `.env` is gitignored, and `.env.example` documents every key. Never print the API key.
@@ -43,6 +46,22 @@ input/, output/    user data (gitignored)
 - **Generation seconds** = the smallest supported duration ≥ shot length + 0.35 s (`supported_durations` from the models endpoint).
 - **Determinism:** hash with md5 or crc32, never Python `hash()`.
 - **Output layout:** part 1 writes to `output/<Track>/compare/`, part 2 to `output/<Track>/short/`. The finished file is `<model-slug><take>.mp4`.
+
+## Starting a new track (the maintainer's usual workflow; order matters)
+
+1. **Budget status.** State the ledger total, the cap and what's left before proposing anything. Ask about details (location, hero, look) with concrete options.
+2. **Analyse the wav and show the result.** Use the section list from `analysis/features_*.json` plus a per-bar table (rms, kick, bass, mid, high, air, kick count) built from the `.npz` over the excerpt and its neighbours. Name the drop hit, the build-ups, where new layers enter, the loudest bars and the natural ending.
+3. **Send the excerpt audio for approval.** The maintainer approves by ear, not from a table. Cut the proposed excerpt with ffmpeg into `output/<Track>/excerpts/*.m4a`, on the bar grid with the tail fade, and list planned cut times relative to the clip start. If the maintainer's timecode is ambiguous (track time or clip time?), cut both variants and let them choose. The automatic excerpt must not end before the loudest bars.
+4. **Write the shot list from the brief.** Read `input/<Track>/notes.txt` and `style.txt`. The `autoshot` default (stage, hands on instrument) ignores the brief. Put shot cuts on structural changes and the visual climax on the loudest bars of the chosen excerpt.
+5. **Print every substituted prompt** with `prompt_of` and read it. Placeholders such as `{hero}` must be noun phrases that still read grammatically wherever they land. Put constraints like "bare hands, no weapon" in `rules`, not inside the noun phrase.
+6. **Run the model probe first, never the full compare first.** `python -m compare "input/<Track>" --probe <shot id>` renders one shot of about 5 s on every `COMPARE_MODELS` model and builds `compare/probe.mp4`, a labelled 2×2 grid in one frame. It costs about $1.7 for 4 models instead of about $8. The maintainer picks the model from it. The full shot list then runs on that one model (part 2, `refine/`), not on all four.
+7. Show the dry-run cost, then wait for the go.
+
+## Pitfalls already hit
+
+- **Content filters.** Veo filters scenes like "enemies lying defeated" and returns no output (cost $0, but the shot is lost). Show defeat indirectly: empty space, fog, the hero walking away.
+- **Rounding of generation seconds.** A shot of 3.65 s becomes 3.65 + 0.35 = 4.0000x and rounds up to the next duration, which re-keys an already paid 4 s shot. When re-timing a shot list, run `plan_cost` per model, and pin `gen_seconds` on shots whose paid clip still covers the new length.
+- **The `[auto excerpt]` line** in compare output is the scorer's candidate. The shot list's own `excerpt` (printed on the `[shotlist]` line) is what gets rendered.
 
 ## Creative rules (maintainer feedback, enforce by default)
 

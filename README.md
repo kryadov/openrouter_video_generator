@@ -81,7 +81,10 @@ input/<Track name>/
 python -m compare "input/My Track" --dry-run    # analysis + excerpt + default shot list + price per model
 python -m compare "input/My Track"              # renders every model, builds the grid
 python -m compare "input/My Track" --models google/veo-3.1-lite bytedance/seedance-2.0-fast
+python -m compare "input/My Track" --probe c1   # cheap first step: one ~5 s shot on every model
 ```
+
+`--probe <shot id>` writes `compare/probe.json` with just that shot, stretched to the fewest whole bars that last at least 5 s (`--probe-bars N` to override). It renders the shot on every model and builds `compare/probe.mp4`, a labelled grid. Use it to pick a model before paying for the whole shot list.
 
 Outputs in `output/<Track>/`:
 
@@ -89,6 +92,7 @@ Outputs in `output/<Track>/`:
 - `compare/shotlist.json`, the default brief: two-bar shots with shot types chosen for the track's energy, the style text and first chorus as context, plus casting and "no singing faces" rules
 - `compare/<model>.mp4`, one finished short per model
 - `compare/compare.mp4`, all models in a labelled grid
+- `compare/probe.mp4` (with `--probe`), the single-shot grid
 
 Pick another excerpt with `--candidate 2`. Edit `compare/shotlist.json` and rerun: shots that already exist are reused.
 
