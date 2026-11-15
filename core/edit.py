@@ -77,6 +77,7 @@ def assemble(c, mid, take=None):
         pre = max(0.0, t_start - ex["audio_start"])
     take = take if take is not None else sl.get("take", "")
     inputs, filt, labels, plan = [], [], [], []
+    acc = 0.0  # output seconds already laid down
     for i, s in enumerate(sl["shots"]):
         a, dur = shot_span(c, s)
         sec = gen_seconds(sl, mid, s, dur)
@@ -112,9 +113,26 @@ def assemble(c, mid, take=None):
                 off, sp = 0.0, 1.0
             else:
                 off, sp, _ = fit_window(f, dur, bo, beat_len)
-            plan.append((s["id"], round(off, 2), sp))
-            filt.append(f"[{i}:v]trim=start={off:.4f}:duration={dur_out * sp:.4f},"
-                        f"setpts=(PTS-STARTPTS)/{sp},{post}[v{i}]")
+            if s.get("ramp"):  # [a, k]: source [off, off+a] plays at speed k, the rest is re-timed to fit,
+                a, k = s["ramp"]  # so the first and last source frames (chained cuts) stay where they were
+                src = dur_out * sp
+                k2 = round((src - a) / (dur_out - a / k), 4)
+                plan.append((s["id"], round(off, 2), f"ramp {k}->{k2}"))
+                filt.append(f"[{i}:v]split=2[r{i}a][r{i}b];"
+                            f"[r{i}a]trim=start={off:.4f}:duration={a:.4f},setpts=(PTS-STARTPTS)/{k}[q{i}a];"
+                            f"[r{i}b]trim=start={off + a:.4f}:duration={src - a:.4f},setpts=(PTS-STARTPTS)/{k2}[q{i}b];"
+                            f"[q{i}a][q{i}b]concat=n=2:v=1:a=0,{post}[v{i}]")
+            else:
+                plan.append((s["id"], round(off, 2), sp))
+                filt.append(f"[{i}:v]trim=start={off:.4f}:duration={dur_out * sp:.4f},"
+                            f"setpts=(PTS-STARTPTS)/{sp},{post}[v{i}]")
+        # cut every shot to an exact frame count on the cumulative timeline: per-shot frame rounding used to
+        # pile up (~1 frame per shot), so the last shot lost its tail and chained cuts slipped off the music
+        out_len = dur_out if not s.get("stutter") else dur
+        nf = round((acc + out_len) * OUT_FPS) - round(acc * OUT_FPS)
+        acc += out_len
+        assert filt[-1].endswith(f"[v{i}]")
+        filt[-1] = filt[-1][:-len(f"[v{i}]")] + f",trim=end_frame={nf}[v{i}]"
         labels.append(f"[v{i}]")
     n = len(sl["shots"])
     filt.append("".join(labels) + f"concat=n={n}:v=1:a=0[vc]")
