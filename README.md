@@ -105,6 +105,7 @@ cp "output/My Track/compare/shotlist.json" "output/My Track/short/shotlist_v1.js
 python -m refine "My Track" shotlist_v1.json --dry-run     # what would be generated, and the cost
 python -m refine "My Track" shotlist_v1.json               # generate the new or changed shots, then edit
 python -m refine "My Track" shotlist_v2.json --assemble-only   # re-edit only (reorder, trim): free
+python -m refine "My Track" shotlist_v2.json --upto c3         # chain staging: generate up to c3, review, continue
 ```
 
 Keep one file per version (`shotlist_v1.json`, `_v2`, …). Each version renders to `short/<model><take>.mp4`. Next to it, `short/<model><take>_sheets/` holds one contact sheet per shot (a frame every 0.25 s) for checking the result before you watch it.

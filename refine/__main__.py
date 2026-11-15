@@ -3,6 +3,7 @@
   python -m refine "My Track" shotlist_v2.json --dry-run
   python -m refine "My Track" shotlist_v2.json
   python -m refine "My Track" shotlist_v2.json --assemble-only   # re-edit for free
+  python -m refine "My Track" shotlist_v2.json --upto c4          # generate a chain only up to c4, no edit
 
 Shot lists live in output/<track>/short/. Only shots whose prompt/seed/params changed are
 generated; everything else comes from the cache, so fixes cost only the shots you touch.
@@ -26,13 +27,14 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--assemble-only", action="store_true")
     ap.add_argument("--take", help="output file suffix override")
+    ap.add_argument("--upto", metavar="SHOT_ID", help="generate only up to this shot and stop (stage a chain)")
     a = ap.parse_args()
     track = a.track.rstrip("/\\").split("/")[-1].split("\\")[-1]
     c = load(track, f"short/{a.shotlist}")
     mid = a.model or c.sl.get("model") or config.get("REFINE_MODEL")
     if not a.assemble_only:
-        generate(c, mid, a.budget, a.dry_run)
-    if not a.dry_run:
+        generate(c, mid, a.budget, a.dry_run, a.upto)
+    if not a.dry_run and not a.upto:
         contact_sheets(c, assemble(c, mid, a.take))
         print(f"ledger total ${videogen.spent():.2f}")
 

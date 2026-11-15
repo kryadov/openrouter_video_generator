@@ -141,8 +141,13 @@ def plan_cost(c, mid):
     return todo
 
 
-def generate(c, mid, budget=None, dry=False):
+def generate(c, mid, budget=None, dry=False, upto=None):
     todo = plan_cost(c, mid)
+    if upto:  # stage a chain: pay only up to this shot, review it, then continue
+        ids = [s["id"] for s in c.sl["shots"]]
+        if upto not in ids:
+            raise SystemExit(f"no shot {upto!r} in the shot list")
+        todo = [t for t in todo if ids.index(t[0]["id"]) <= ids.index(upto)]
     total = sum(t[3] for t in todo)
     jobs = []
     for s, seed, sec, est, out in todo:

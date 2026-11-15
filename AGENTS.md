@@ -80,6 +80,13 @@ List what you checked and what you found when you deliver. If a defect is cheap 
   - Put real-world physics in `rules`: people fall onto the floor, nobody passes through walls, railings or doors, nothing appears, disappears or repairs itself, only the described people are present, all of them clothed.
   - End on a memorable wide shot (a crane up over the whole set, colour, the moon), not on a plain exit.
   - Review every 0.25 s of each new shot for these failures before building on it.
+- **Hard cuts and doors (Last of Trance v5, rejected).** A hard cut to a fresh text-to-video shot changed the hero's look (a mask appeared) and restaged an entrance through closed doors, so it read as "he runs into the same doors again". A finale through a gate had the doors close behind him by themselves. A kick on the first of four attackers knocked all four down ("domino" nonsense). An early shot that had passed review had two men in the same striped tracksuit. Rules:
+  - The hero's look survives only through a chain. Keep the whole clip as one chain in as few places as possible. Never hard-cut to a new text-to-video shot of the hero, and state in `rules` that he looks the same the whole time (no mask, no helmet).
+  - Avoid doors and gates after the first entrance. If a door is used, it "swings open and stays open". Never stage a door that the hero went through before, and never end on a door.
+  - "Nobody falls unless he is hit or thrown himself." One attacker per strike.
+  - Distinct clothing is mandatory: add "no two people wear similar clothes" to `rules`. On review, compare every attacker's outfit against every other attacker in the whole video, including shots approved earlier.
+  - On review, also compare the hero's look and every door's state across the cuts, not only inside each shot.
+  - Stage a chain with `refine ... --upto <shot id>`: generate up to one shot, review it, then continue.
 - **Content filters.** Veo filters scenes like "enemies lying defeated" and returns no output (cost $0, but the shot is lost). Show defeat indirectly: empty space, fog, the hero walking away.
 - **Rounding of generation seconds.** A shot of 3.65 s becomes 3.65 + 0.35 = 4.0000x and rounds up to the next duration, which re-keys an already paid 4 s shot. When re-timing a shot list, run `plan_cost` per model, and pin `gen_seconds` on shots whose paid clip still covers the new length.
 - **The `[auto excerpt]` line** in compare output is the scorer's candidate. The shot list's own `excerpt` (printed on the `[shotlist]` line) is what gets rendered.
