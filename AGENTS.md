@@ -54,6 +54,7 @@ Never hand the maintainer a video, preview or shot without first checking it for
 - the hero turning back, U-turns, the same door or wall breaking twice, broken things repairing themselves, place changing inside a shot;
 - impossible physics: bodies through railings, walls or doors, flying, superhuman jumps, extras doing pointless things (holding a tree);
 - the hero standing idle, empty holds, a dull ending;
+- attackers who look harmless or passive (old people, nobody raising their hands), or two attackers who look alike across the whole video (same build, hair and clothing type);
 - faces in close-up, unclothed extras when not asked for, mangled hands, text.
 List what you checked and what you found when you deliver. If a defect is cheap to fix and the maintainer already said "go", fix it first.
 
@@ -86,6 +87,7 @@ List what you checked and what you found when you deliver. If a defect is cheap 
   - "Nobody falls unless he is hit or thrown himself." One attacker per strike.
   - Distinct clothing is mandatory: add "no two people wear similar clothes" to `rules`. On review, compare every attacker's outfit against every other attacker in the whole video, including shots approved earlier.
   - On review, also compare the hero's look and every door's state across the cuts, not only inside each shot.
+  - Attackers must be credible, active fighters (fit, aged 20–45, in fighting stances, really punching, kicking or grabbing). An old man who never raised his hands was rejected outright. Write "every attacker is a credible, fit fighter aged 20 to 45 who actively attacks the master" in `rules`, and avoid descriptors that read as old (white or grey hair, "older").
   - Stage a chain with `refine ... --upto <shot id>`: generate up to one shot, review it, then continue.
 - **Content filters.** Veo filters scenes like "enemies lying defeated" and returns no output (cost $0, but the shot is lost). Show defeat indirectly: empty space, fog, the hero walking away.
 - **Rounding of generation seconds.** A shot of 3.65 s becomes 3.65 + 0.35 = 4.0000x and rounds up to the next duration, which re-keys an already paid 4 s shot. When re-timing a shot list, run `plan_cost` per model, and pin `gen_seconds` on shots whose paid clip still covers the new length.
