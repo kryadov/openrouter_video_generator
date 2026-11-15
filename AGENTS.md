@@ -50,6 +50,7 @@ input/, output/    user data (gitignored)
 ## Quality gate before showing anything (maintainer requirement)
 
 Never hand the maintainer a video, preview or shot without first checking it for obvious nonsense. `refine` writes `<video>_sheets/<shot>_<start>s.jpg` with frames every 0.25 s. Read every sheet, and for the cuts also grab frames around each boundary. Reject and fix (or report as a defect, never as done) when you see:
+- hidden cuts inside a shot (a sudden jump of framing or light);
 - people or bodies that appear, multiply or vanish, extras who weren't fought lying around, twins or clones;
 - the hero turning back, U-turns, the same door or wall breaking twice, broken things repairing themselves, place changing inside a shot;
 - impossible physics: bodies through railings, walls or doors, flying, superhuman jumps, extras doing pointless things (holding a tree);
@@ -91,6 +92,7 @@ List what you checked and what you found when you deliver. If a defect is cheap 
   - Attackers must be credible, active fighters (fit, aged 20–45, in fighting stances, really punching, kicking or grabbing). An old man who never raised his hands was rejected outright. Write "every attacker is a credible, fit fighter aged 20 to 45 who actively attacks the master" in `rules`, and avoid descriptors that read as old (white or grey hair, "older").
   - Stage a chain with `refine ... --upto <shot id>`: generate up to one shot, review it, then continue.
 - **Fog indoors (Last of Trance v7).** A shared `look` with "thick drifting fog" made Seedance puff smoke from under the hero's feet indoors, and the maintainer rejected it. For indoor shots, replace `{look}` with an indoor variant: "clear air indoors with no fog, no smoke, no mist". Seedance also keeps about 1.7 s of plain running before a fight in a chained shot even when told to attack "in the first second". Plan the bars for that, or trim it in the edit.
+- **Hidden cuts inside a shot (maintainer requirement: one continuous take everywhere).** Seedance sometimes inserts its own cut inside a generated clip: the camera jumps closer and the light changes (Last of Trance v7, c2 at 2.4 s, c3 at 1.9 s). The maintainer saw it as a "резкий рывок", and the edit can't fix it. Every shot prompt must start with "One single continuous camera take with no cuts, no jumps and no change of lighting". Write it in the shot text, not in a shared placeholder, so accepted shots don't re-key. On review, scan each clip at 12 fps for a sudden change of framing or light.
 - **Content filters.** Veo filters scenes like "enemies lying defeated" and returns no output (cost $0, but the shot is lost). Show defeat indirectly: empty space, fog, the hero walking away.
 - **Rounding of generation seconds.** A shot of 3.65 s becomes 3.65 + 0.35 = 4.0000x and rounds up to the next duration, which re-keys an already paid 4 s shot. When re-timing a shot list, run `plan_cost` per model, and pin `gen_seconds` on shots whose paid clip still covers the new length.
 - **The `[auto excerpt]` line** in compare output is the scorer's candidate. The shot list's own `excerpt` (printed on the `[shotlist]` line) is what gets rendered.
