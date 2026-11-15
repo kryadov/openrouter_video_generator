@@ -126,6 +126,7 @@ Keep one file per version (`shotlist_v1.json`, `_v2`, …). Each version renders
      "chain": true,                         // start on the previous shot's last used frame: seamless cut
      "window": [0.2, 1.0],                  // manual source [offset, speed] instead of beat-fitting
      "hflip": true,                          // mirror the shot in the edit (free); mirror every chained shot after it too
+     "flash": 0.2,                           // white flash-in at the shot start (seconds), hides a mismatched cut on a strong beat
      "stutter": true}                       // cut one slice per beat on motion peaks (drums etc.)
   ]
 }

@@ -87,7 +87,8 @@ def assemble(c, mid, take=None):
         bo = [b - a for b in c.beats if a - 1e-3 <= b < a + dur]
         inputs += ["-i", str(f)]
         post = (f"scale={OUT_W}:{OUT_H}:force_original_aspect_ratio=increase,crop={OUT_W}:{OUT_H},"
-                f"fps={OUT_FPS},setsar=1,{sl.get('grade', 'null')}" + (",hflip" if s.get("hflip") else ""))
+                f"fps={OUT_FPS},setsar=1,{sl.get('grade', 'null')}" + (",hflip" if s.get("hflip") else "")
+                + (f",fade=t=in:st=0:d={s['flash']}:color=white" if s.get("flash") else ""))
         if s.get("stutter"):
             sls = stutter_slices(f, dur, bo)
             plan.append((s["id"], "stutter", len(sls)))
