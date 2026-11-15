@@ -107,7 +107,7 @@ python -m refine "My Track" shotlist_v1.json               # generate the new or
 python -m refine "My Track" shotlist_v2.json --assemble-only   # re-edit only (reorder, trim): free
 ```
 
-Keep one file per version (`shotlist_v1.json`, `_v2`, …). Each version renders to `short/<model><take>.mp4`.
+Keep one file per version (`shotlist_v1.json`, `_v2`, …). Each version renders to `short/<model><take>.mp4`. Next to it, `short/<model><take>_sheets/` holds one contact sheet per shot (a frame every 0.25 s) for checking the result before you watch it.
 
 ### Shot list reference
 

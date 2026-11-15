@@ -47,6 +47,16 @@ input/, output/    user data (gitignored)
 - **Determinism:** hash with md5 or crc32, never Python `hash()`.
 - **Output layout:** part 1 writes to `output/<Track>/compare/`, part 2 to `output/<Track>/short/`. The finished file is `<model-slug><take>.mp4`.
 
+## Quality gate before showing anything (maintainer requirement)
+
+Never hand the maintainer a video, preview or shot without first checking it for obvious nonsense. `refine` writes `<video>_sheets/<shot>_<start>s.jpg` with frames every 0.25 s. Read every sheet, and for the cuts also grab frames around each boundary. Reject and fix (or report as a defect, never as done) when you see:
+- people or bodies that appear, multiply or vanish, extras who weren't fought lying around, twins or clones;
+- the hero turning back, U-turns, the same door or wall breaking twice, broken things repairing themselves, place changing inside a shot;
+- impossible physics: bodies through railings, walls or doors, flying, superhuman jumps, extras doing pointless things (holding a tree);
+- the hero standing idle, empty holds, a dull ending;
+- faces in close-up, unclothed extras when not asked for, mangled hands, text.
+List what you checked and what you found when you deliver. If a defect is cheap to fix and the maintainer already said "go", fix it first.
+
 ## Starting a new track (the maintainer's usual workflow; order matters)
 
 1. **Ask about details** (location, hero, look) with concrete options.

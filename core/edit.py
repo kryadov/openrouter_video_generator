@@ -155,3 +155,20 @@ def compare_grid(items, out):
                     "-t", f"{dur:.3f}", str(out)], check=True)
     print(f"  -> {out}")
     return out
+
+
+def contact_sheets(c, video, fps=4):
+    """One jpg per shot (frames every 1/fps s of the finished video) in <video stem>_sheets/, for review."""
+    out_dir = video.with_name(video.stem + "_sheets")
+    out_dir.mkdir(exist_ok=True)
+    t0 = c.bars[c.b0] / 60
+    outs = []
+    for s in c.sl["shots"]:
+        a, dur = shot_span(c, s)
+        n = max(1, round(dur * fps))
+        jpg = out_dir / f"{s['id']}_{a - t0:05.2f}s.jpg"
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{a - t0:.3f}", "-t", f"{dur:.3f}", "-i", str(video),
+                        "-vf", f"fps={fps},scale=240:-1,tile={n}x1", "-frames:v", "1", str(jpg)], check=True)
+        outs.append(jpg)
+    print(f"  review sheets -> {out_dir} (check every frame for nonsense before showing the video)")
+    return outs

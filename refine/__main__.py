@@ -12,7 +12,7 @@ import argparse
 import sys
 
 from core import config, videogen
-from core.edit import assemble
+from core.edit import assemble, contact_sheets
 from core.shotlist import generate, load
 
 
@@ -33,7 +33,7 @@ def main():
     if not a.assemble_only:
         generate(c, mid, a.budget, a.dry_run)
     if not a.dry_run:
-        assemble(c, mid, a.take)
+        contact_sheets(c, assemble(c, mid, a.take))
         print(f"ledger total ${videogen.spent():.2f}")
 
 
