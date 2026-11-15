@@ -69,6 +69,7 @@ List what you checked and what you found when you deliver. If a defect is cheap 
    The maintainer has picked `bytedance/seedance-2.0-fast` (`REFINE_MODEL`) on every track so far. Recommend it up front, and treat the probe as a confirmation, not an open question.
 7. **Reuse the probe shot in part 2.** Copy (don't move) the chosen model's probe clip from `compare/shots/<model>/` to `short/shots/<model>/`. Give that shot in `short/shotlist_v1.json` the same prompt and the same bar count, so that its cache key matches and it costs $0. Set `"model"` in the shot list.
 8. Show the dry-run cost, then wait for the go.
+9. **Generate section by section with acceptance (maintainer requirement).** Generate one shot (`refine ... --upto <id>`) and pass it through the quality gate. Then assemble a preview of the section with music (a sub-shot-list with `excerpt.bars` cut to the section and `tail_bars` 0) and show it. Only after the maintainer accepts it, generate the next shot. A chain re-keys everything after a changed shot, so never run ahead.
 
 ## Pitfalls already hit
 
