@@ -137,12 +137,14 @@ def assemble(c, mid, take=None):
     n = len(sl["shots"])
     filt.append("".join(labels) + f"concat=n={n}:v=1:a=0[vc]")
     total += pre
-    filt.append(f"[vc]fade=t=out:st={total - 0.8:.3f}:d=0.8[v]" if tail else "[vc]null[v]")
+    fi = float(ex.get("fade_in", 0))  # seconds of audio fade-in; the picture fades in from black like the tail
+    vin = f"fade=t=in:st=0:d={min(0.8, fi):.3f}," if fi else ""
+    filt.append(f"[vc]{vin}fade=t=out:st={total - 0.8:.3f}:d=0.8[v]" if tail else f"[vc]{vin}null[v]")
     inputs += ["-ss", f"{t_start - pre:.4f}", "-t", f"{total:.4f}", "-i", str(c.wav)]
     fo = max(tail_s, 0.03)
     out = c.base / f"{slug(mid)}{take}.mp4"
     cmd = ["ffmpeg", "-y", "-loglevel", "error", *inputs, "-filter_complex", ";".join(filt),
-           "-map", "[v]", "-map", f"{n}:a", "-af", f"afade=t=in:d=0.02,afade=t=out:st={total - fo:.3f}:d={fo:.3f}",
+           "-map", "[v]", "-map", f"{n}:a", "-af", f"afade=t=in:d={max(fi, 0.02):.3f},afade=t=out:st={total - fo:.3f}:d={fo:.3f}",
            *encode.h264_args(), "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "256k",
            "-movflags", "+faststart", "-t", f"{total:.4f}", str(out)]
     subprocess.run(cmd, check=True)

@@ -115,7 +115,8 @@ Keep one file per version (`shotlist_v1.json`, `_v2`, …). Each version renders
 ```jsonc
 {
   "excerpt": {"start": 117.28, "bars": 16, "tail_bars": 1,   // bar grid; tail bar = fade-out ending
-              "audio_start": 53.55},                          // optional: start audio in the gap before a vocal pickup
+              "audio_start": 53.55,                           // optional: start audio in the gap before a vocal pickup
+              "fade_in": 2.4},                                // optional: audio fade-in seconds; picture fades in from black (max 0.8 s)
   "model": "bytedance/seedance-2.0-fast", "aspect_ratio": "9:16", "resolution": "720p",
   "music": "...", "look": "...", "rules": "...",             // any string field becomes a {placeholder}
   "grade": "eq=contrast=1.05:saturation=1.08,noise=alls=5:allf=t",
