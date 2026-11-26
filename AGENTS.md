@@ -57,6 +57,7 @@ Never hand the maintainer a video, preview or shot without first checking it for
 - the hero standing idle, empty holds, a dull ending;
 - attackers who look harmless or passive (old people, nobody raising their hands), or two attackers who look alike across the whole video (same build, hair and clothing type);
 - faces in close-up, unclothed extras when not asked for, mangled hands, text.
+- broken motion mechanics: track each person's limbs through the whole shot (crop the legs and hands and tile them at 6 fps). Pedals that stop turning (coasting), feet off the pedals, hands that leave the handlebars, wheels that don't spin, running legs out of step with the ground. A gesture in the prompt ("spreads her arms") often freezes the legs, so give the action a steady rhythm in the prompt ("keeps pedalling at a steady, even rhythm the whole time, never coasting").
 List what you checked and what you found when you deliver. If a defect is cheap to fix and the maintainer already said "go", fix it first.
 
 ## Starting a new track (the maintainer's usual workflow; order matters)
